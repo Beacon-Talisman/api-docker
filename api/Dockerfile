@@ -1,5 +1,5 @@
                                     
-FROM centos
+FROM centos/systemd
 
 MAINTAINER "Tony Edwardson" <tonye@talisman.tech>
 
@@ -50,26 +50,27 @@ WORKDIR /tal-api
 
 RUN git checkout -b timesheets_new origin/timesheets_new 
 
+RUN echo echo DANCER_ENVIRONMENT=docker >> ~/.bashrc
 RUN perl -Mlocal::lib=/tal-api/perl5lib >> ~/.bashrc
 
 COPY mariadb*.rpm /tal-api/
-RUN yum -y install mariadb*.rpm
+COPY setup_database.sh  /tal-api
 COPY api_dev.sql.bz2 /tal-api
+
+RUN yum -y install mariadb*.rpm
+VOLUME talisman_data:/var/lib/mysql
 
 RUN rm -rf /var/lib/mysql/*
 RUN mkdir -p /var/lib/mysql/
 RUN chown mysql:mysql /var/lib/mysql/
-RUN systemctl start mariadb
 RUN systemctl enable mariadb
-RUN mysqladmin -u root password gemini2
-RUN mysql -u root --password=gemini2 -e 'create database talisman'
-RUN bzcat api_dev.sql.bz2 |mysql -u root --password=gemini2 talisman
 RUN echo 3000 > PORT
-RUN start-talisman.sh
 RUN yum -y update 
 RUN yum -y clean all
 
 
-EXPOSE 5000
+
+EXPOSE 3000
+EXPOSE 3806
 
 CMD ["/usr/sbin/init"]

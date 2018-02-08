@@ -10,6 +10,9 @@ build.sh  # build the image including database
 run.sh    # to start mage in a container
 login.sh  # to log you into the container as root in a bash session
 
+The first time you login and any tiem you need to reset the database
+run :-
+setup_database.sh
 
 To start and stop the api use
 
