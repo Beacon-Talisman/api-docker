@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-cd $(readlink -f ${0%/*})
 . common.sh
 
 
