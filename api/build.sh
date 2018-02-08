@@ -2,7 +2,6 @@
 
 . common.sh
 
-
 docker build \
         --force-rm \
         -t $DOCKER_IMAGE \
