@@ -1,0 +1,37 @@
+version: "2"
+services:
+    api:
+        image: talisman/api:latest
+        hostname: tal_api
+        ports:
+         - "3000:3000"
+        depends_on: 
+        - db
+        environment:
+          - MYSQL_TALISMAN_DATABASE=export3
+          - MYSQL_SYSTEM_DATABASE=Talisman_System4
+          - MYSQL_UNIX_PORT=3308
+          - MYSQL_ROOT_PASSWORD=gemini2
+          - DANCER_PORT=3000
+        links:
+            - db
+    db:
+        image: talisman/db:latest
+        hostname: tal_db
+        restart: always
+        volumes:
+          - /var/lib/mysql
+        environment:
+          - MYSQL_UNIX_PORT=3308
+          - MYSQL_ROOT_PASSWORD=gemini2
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        hostname: tal_php
+        environment:
+         - PMA_ARBITRARY=1
+        restart: always
+        ports:
+         - 8180:81
+        volumes:
+         - /sessions
