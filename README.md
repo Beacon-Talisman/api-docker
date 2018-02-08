@@ -20,10 +20,16 @@ start-talapi.sh
 stop-talapi.sh
 restart-talapi.sh
 
+point your browser at  http://<hostname>:3000/api/dev16
+
+NOTE: /api/dev16 is specified bt the setting of prefix in lib/TalApi.pm
+NOTE2: your DOCKER_ENVIRONMENT is set to docker so your setup is defined in environments/docker.yml
+
 Log files are created in the subdirectory logs
 
 server.log is the initial log and wil contasin details if anything craches without handling the error
-development.log contains everything out by debug or error statements from the main Dancer module lib/TalApi.pm
+<environment>.logcontains everything out by debug or error statements from the main Dancer module lib/TalApi.pm
+i.e. docker.log 
 api.log contains log messages produced by the MyAPI object (lib/MyAPI.pm and lib/MyAPI/Methods.pm)
 sql_api.log contains log messages produced by the SQL Query object lib/MyAPI/SQLQuery.pm
 

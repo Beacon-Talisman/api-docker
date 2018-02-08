@@ -49,8 +49,9 @@ RUN git clone git@github.com:Beacon-Talisman/tal-api.git /tal-api
 WORKDIR /tal-api
 
 RUN git checkout -b timesheets_new origin/timesheets_new 
+RUN git pull
 
-RUN echo echo DANCER_ENVIRONMENT=docker >> ~/.bashrc
+RUN echo export DANCER_ENVIRONMENT=docker >> ~/.bashrc
 RUN perl -Mlocal::lib=/tal-api/perl5lib >> ~/.bashrc
 
 COPY mariadb*.rpm /tal-api/
@@ -71,6 +72,6 @@ RUN yum -y clean all
 
 
 EXPOSE 3000
-EXPOSE 3806
+EXPOSE 3306
 
 CMD ["/usr/sbin/init"]
