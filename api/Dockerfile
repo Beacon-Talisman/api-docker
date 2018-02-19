@@ -39,16 +39,14 @@ RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
     chmod 600 /root/.ssh/id_rsa.pub
 
 
-
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 RUN echo "Host earth.beacon.co.uk\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
-
 
 RUN git clone git@github.com:Beacon-Talisman/tal-api.git /tal-api
 
 WORKDIR /tal-api
 
-RUN git checkout -b timesheets_new origin/timesheets_new 
+RUN git checkout -b vencuro_dev origin/vencuro_dev
 RUN git pull
 
 RUN echo export DANCER_ENVIRONMENT=docker >> ~/.bashrc
@@ -68,7 +66,6 @@ RUN systemctl enable mariadb
 RUN echo 3000 > PORT
 RUN yum -y update 
 RUN yum -y clean all
-
 
 
 EXPOSE 3000
