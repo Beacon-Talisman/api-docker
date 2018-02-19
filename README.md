@@ -3,6 +3,8 @@ Docker for everything nmeeded for API
 
 ony the api bit works currently
 
+URL for roweb dev server: http://vencuro-api.dock.roweb.ro/api/dev16/
+
 to use:
 cd api
 then run:-
