@@ -42,12 +42,12 @@ RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 RUN echo "Host earth.beacon.co.uk\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 
-RUN git clone git@github.com:Beacon-Talisman/tal-api.git /tal-api
+#RUN git clone git@github.com:Beacon-Talisman/tal-api.git /tal-api
 
 WORKDIR /tal-api
 
-RUN git checkout -b vencuro_dev origin/vencuro_dev
-RUN git pull
+#RUN git checkout -b vencuro_dev origin/vencuro_dev
+#RUN git pull
 
 RUN echo export DANCER_ENVIRONMENT=docker >> ~/.bashrc
 RUN perl -Mlocal::lib=/tal-api/perl5lib >> ~/.bashrc
