@@ -3,8 +3,8 @@ FROM centos/systemd
 
 MAINTAINER "Tony Edwardson" <tonye@talisman.tech>
 
-ARG ssh_prv_key
-ARG ssh_pub_key
+ARG github_username
+ARG github_password
 
 RUN yum -y install git
 RUN yum -y install openssh-server
@@ -25,29 +25,13 @@ RUN yum -y install perl-DBI
 RUN yum -y install perl-DBD-MySQL
 RUN yum -y install bzip2
 
-
-
-# Authorize SSH Host
-RUN mkdir -p /root/.ssh && \
-    chmod 0700 /root/.ssh && \
-    ssh-keyscan github.com > /root/.ssh/known_hosts
-
-# Add the keys and set permissions
-RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
-    echo "$ssh_pub_key" > /root/.ssh/id_rsa.pub && \
-    chmod 600 /root/.ssh/id_rsa && \
-    chmod 600 /root/.ssh/id_rsa.pub
-
-
-RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
-RUN echo "Host earth.beacon.co.uk\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
-
-#RUN git clone git@github.com:Beacon-Talisman/tal-api.git /tal-api
+# RUN git clone git@github.com:Beacon-Talisman/tal-api.git /tal-api
+RUN git clone https://$github_username:$github_password@github.com/Beacon-Talisman/api-docker.git .
 
 WORKDIR /tal-api
 
-#RUN git checkout -b vencuro_dev origin/vencuro_dev
-#RUN git pull
+RUN git checkout -b vencuro_dev origin/vencuro_dev
+RUN git pull
 
 RUN echo export DANCER_ENVIRONMENT=docker >> ~/.bashrc
 RUN perl -Mlocal::lib=/tal-api/perl5lib >> ~/.bashrc
@@ -64,9 +48,8 @@ RUN mkdir -p /var/lib/mysql/
 RUN chown mysql:mysql /var/lib/mysql/
 RUN systemctl enable mariadb
 RUN echo 3000 > PORT
-RUN yum -y update 
+RUN yum -y update
 RUN yum -y clean all
-
 
 EXPOSE 3000
 EXPOSE 3306

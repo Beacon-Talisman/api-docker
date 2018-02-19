@@ -1,0 +1,35 @@
+--------------------------------------------------------------------------------------------
+			Install Docker machine for LOCALHOST and ROWEB server
+--------------------------------------------------------------------------------------------
+
+1. open docker console
+2. create new folder (eg. C:\Users\marius\Projects\Talisman\api-docker)
+3. get the docker API from github:
+	> git clone https://github.com/Beacon-Talisman/api-docker.git .
+4. go to api-docker folder from console eg.:
+	> cd api-docker/api
+4. go to build.sh file and edit it, adding the USERNAME and PASSWORD for your GitHub account to can clone the Talisman API
+5. run the docker builder from console:
+	> build.sh
+6. run the docker runner from console:
+	> run.sh
+6. open the docker console by login:
+	> login.sh
+8. run the database setup from the file using the docker console logged-in:
+	> setup_database.sh
+9. need to give rights to access database from external and from docker console, after login:
+	> mysql u: root p:gemini2
+	> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'gemini2';
+	> flush privileges;
+	> exit;
+10. setup you environment to use local::lib:
+	> eval $( perl -Mlocal::lib=$PWD/perl5lib)
+11. Install missing libs for perl:
+	> cd tal-api
+	> cpanm -S --installdeps .
+	> perl Makefile.PL
+	> make test
+12. Start the application:
+	> start-talapi.sh
+13. Stop the application:
+	> stop-talapi
