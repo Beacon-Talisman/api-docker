@@ -3,33 +3,55 @@
 --------------------------------------------------------------------------------------------
 
 1. open docker console
-2. create new folder (eg. C:\Users\marius\Projects\Talisman\api-docker)
+2. create new folder (eg. C:\Users\marius\Projects\Talisman\api-docker) and go there:
+    > mkdir api-docker
+    > cd api-docker
 3. get the docker API from github:
-	> git clone https://github.com/Beacon-Talisman/api-docker.git .
-4. go to api-docker folder from console eg.:
-	> cd api-docker/api
-4. go to build.sh file and edit it, adding the USERNAME and PASSWORD for your GitHub account to can clone the Talisman API
+	> git clone -b roweb_dev https://github.com/Beacon-Talisman/api-docker.git .
+4. go to edit variables from the system:
+    - edit Dockerfile file by adding the USERNAME and PASSWORD for your GitHub account to can clone the Talisman API
+    PS: previous version was used git keys for cloning but was replaced because of crashing
+    (requests password on a temporary machine and there is no access to provide it)
 5. run the docker builder from console:
 	> build.sh
 6. run the docker runner from console:
 	> run.sh
-6. open the docker console by login:
-	> login.sh
+7. open the docker console by login:
+	> login.sh (or open the console from Docker machine)
 8. run the database setup from the file using the docker console logged-in:
 	> setup_database.sh
-9. need to give rights to access database from external and from docker console, after login:
-	> mysql u: root p:gemini2
-	> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'gemini2';
-	> flush privileges;
-	> exit;
-10. setup you environment to use local::lib:
-	> eval $( perl -Mlocal::lib=$PWD/perl5lib)
-11. Install missing libs for perl:
+
+--- EXTRA ---
+
+1. Install missing libs for perl:
 	> cd tal-api
 	> cpanm -S --installdeps .
 	> perl Makefile.PL
 	> make test
-12. Start the application:
+2. Start the application:
 	> start-talapi.sh
-13. Stop the application:
+3. Stop the application:
 	> stop-talapi
+
+--- In case of MySQL problems ---
+
+Follow these steps:
+    1. Go to Docker container console
+    2. Open & Edit /etc/my.cnf
+    3. Add skip-grant-tables under [mysqld]
+    4. Restart Mysql: systemctl restart mariadb
+    5. You should be able to login to mysql now using the below command mysql -u root -p
+    6. Run mysql> flush privileges;
+    7. Set new password by:
+        > ALTER USER 'root'@'localhost' IDENTIFIED BY 'gemini2';
+        or
+        > SET PASSWORD FOR 'root'@'localhost' = PASSWORD('gemini2');
+        > exit;
+    8. Go back to /etc/my.cnf and remove/comment skip-grant-tables
+    9. Restart Mysql
+    10. Now you will be able to login with the new password mysql -u root -p
+    11. need to give rights to access database from external and from docker console, after login:
+        > mysql u: root p:gemini2
+        > GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'gemini2';
+        > flush privileges;
+        > exit;
